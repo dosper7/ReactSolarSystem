@@ -60,7 +60,7 @@ class App extends Component {
     let idx = planets.findIndex(p => p.id === planet.id);
     planets[idx] = planet;
     this.setState({ planets });
-    DBService.editPlanet(planet);
+    DBService.updatePlanet(planet);
   }
 
   deletePlanet = (planet) => {

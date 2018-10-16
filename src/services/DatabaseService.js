@@ -46,15 +46,13 @@ const API = {
                 })
             });
         });
-       
-
     },
     addPlanet: (planet) => {
         WebDB.ExecuteTransaction('INSERT INTO Planets (id,name, info) VALUES (?,?,?)', [planet.id,planet.name, planet.info]);
     },
 
     updatePlanet: (planet) => {
-        WebDB.ExecuteTransaction('INSERT INTO Planets (id, info) VALUES (?,?)', [planet.id, planet.info]);
+        WebDB.ExecuteTransaction('UPDATE Planets SET name=?, info=? WHERE id=?', [planet.name, planet.info, planet.id]);
     },
 
     deletePlanet: (planet) => {
