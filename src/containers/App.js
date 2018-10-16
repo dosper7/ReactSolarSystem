@@ -104,12 +104,19 @@ class App extends Component {
     });
     return (
       <div className="container">
-        <AddItemBar onAddNewItem={this.addPlanet} />
-        <table className="table table-bordered">
-          <tbody>
-            {spaceObjects}
-          </tbody>
-        </table>
+        <div className="card">
+          <div className="card-body">
+          <h5 className="card-title">Add Planet</h5>
+            <AddItemBar onAddNewItem={this.addPlanet} />
+            
+          </div>
+          <table className="table table-bordered">
+              <tbody>
+                {spaceObjects}
+              </tbody>
+            </table>
+        </div>
+
         {/* <SolarSystem
           planets={this.state.planets}
           onPlanetSort={this.sortPlanets}

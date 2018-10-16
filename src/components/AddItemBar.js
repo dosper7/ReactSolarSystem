@@ -25,14 +25,12 @@ class AddItemBar extends Component {
         return (
             <div className="form-inline col-sm-6">
                 <div className="col">
-                    <input type="text" className="form-control" name="name" placeholder="Planet name" onChange={this.onChangeHandler} value={this.state.name} />
+                    <input type="text" className="form-control" name="name" placeholder="Name" onChange={this.onChangeHandler} value={this.state.name} />
                 </div>
                 <div className="col">
-                    <input type="text" className="form-control" name="info" placeholder="Planet Info" onChange={this.onChangeHandler} value={this.state.info} />
+                    <input type="text" className="form-control" name="info" placeholder="Info" onChange={this.onChangeHandler} value={this.state.info} />
                 </div>
-                <div className="col">
-                    <button className="btn btn-primary btn-sm" onClick={this.onAddNewItem}>Add</button>
-                </div>
+                <button className="btn btn-primary btn-sm" onClick={this.onAddNewItem}>Add</button>
             </div>
         );
     }
