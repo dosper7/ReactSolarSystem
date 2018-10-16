@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './containers/App';
+import SolarSystem from './containers/SolarSystem';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<SolarSystem />, document.getElementById('root'));
 

@@ -4,7 +4,7 @@ import SpaceObject from '../components/SpaceObject'
 import AddItemBar from '../components/AddItemBar';
 import WithCard from '../hoc/WithCard';
 import SpaceObjectList from '../components/SpaceObjectList';
-import FilterItem from '../components/FilterItem';
+import SearchBar from '../components/SearchBar';
 
 class App extends Component {
 
@@ -53,28 +53,27 @@ class App extends Component {
   }
 
   addMoon = (moon) => {
-    DBService.addMoon(moon);
+    //DBService.addMoon(moon);
   }
 
-  editPlanet = (e, planet) => {
-    if (e.target.value) {
-      let planets = [...this.state.initialPlanets];
+  editPlanet = (planet) => {
+      let planets = [...this.state.planets];
       let idx = planets.findIndex(p => p.id === planet.id);
-      planets[idx].info = e.target.value;
-      this.setState({ planets, initialPlanets: planets });
-    }
+      planets[idx] = planet;
+      this.setState({planets});
+    
     //DBService.editPlanet(planet);
   }
 
   deletePlanet = (planet) => {
-    let planets = [...this.state.initialPlanets];
+    let planets = [...this.state.planets];
     planets.splice(planets.indexOf(planet), 1);
-    this.setState({ planets, initialPlanets: planets });
-    DBService.deletePlanet(planet);
+    this.setState({ planets });
+    //DBService.deletePlanet(planet);
   }
 
   editMoon = (moon) => {
-    DBService.editPlanet(moon);
+    //DBService.editPlanet(moon);
   }
 
   delenteMoon = (moon) => {
@@ -94,32 +93,46 @@ class App extends Component {
     this.setState({ planets: filteredPlanets });
   }
 
+  onSearchBarTextChanged = (txt) => {
+    this.setState({ filterText: txt })
+  }
+
+  showMoonsInfo = (planet) =>{
+
+  }
+
   render() {
 
     let planets = this.state.planets;
-
-    if (this.state.planets) {
-
+    if (planets) {
       planets = [...this.state.planets];
-
       if (this.state.filterText) {
         planets = planets.filter(p => p.name && p.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
       }
-
     }
+
+    const hasPlanets = planets && planets.length > 0;
 
     const spaceObjects = planets && planets.map(planet =>
       <SpaceObject
+        showChildsInfoClick={this.showMoonsInfo}
         key={planet.id}
-        name={planet.name}
-        info={planet.info}
-        childSpaceObjects={planet.moons} />);
+        spaceObject={planet}
+        childSpaceObjects={planet.moons}
+        onEdit={this.editPlanet}
+        onDelete={this.deletePlanet}
+        groupName="Moons" />);
 
     return (
       <div className="container mt-4">
         <WithCard title="Add Planet" body={<AddItemBar onAddNewItem={this.addPlanet} />} />
-        <WithCard body={<FilterItem onAddNewItem={this.addPlanet} onTextChange={(val) => this.setState({ filterText: val })} />} />
-        <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} filterText={this.state.filterText} />
+        <WithCard body={
+          <SearchBar
+            onAddNewItem={this.addPlanet}
+            placeHolderHint="Planet Name"
+            onTextChange={this.onSearchBarTextChanged} />
+        } />
+        {hasPlanets && <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} filterText={this.state.filterText} />}
       </div>
     );
   }
