@@ -9,9 +9,11 @@
 # Build & Run SolarSystem app
 ``` bash
 
-# open command line
+Open a command line a follow instrunctions:
 
-# install dependencies
+Copy project with git clone command
+
+# install dependencies with npm install command
 npm install
  
 # runs website with hot reload at localhost:3000
