@@ -8,12 +8,12 @@ let WebDB = {
 
         //planets
         this.DB.transaction(function (tx) {
-            tx.executeSql("CREATE TABLE IF NOT EXISTS Planets(ID INTEGER PRIMARY KEY ASC, info TEXT)", []);
+            tx.executeSql("CREATE TABLE IF NOT EXISTS Planets(ID INTEGER PRIMARY KEY ASC, name TEXT, info TEXT)", []);
         });
 
         //moons
         this.DB.transaction(function (tx) {
-            tx.executeSql("CREATE TABLE IF NOT EXISTS Moons(ID INTEGER PRIMARY KEY ASC, info TEXT, planetId INTEGER)", []);
+            tx.executeSql("CREATE TABLE IF NOT EXISTS Moons(ID INTEGER PRIMARY KEY ASC, name TEXT, info TEXT, planetId INTEGER)", []);
         });
     },
     ExecuteTransaction(query, args) {
@@ -29,24 +29,28 @@ const API = {
         WebDB.CreateTables();
     },
 
-    async getPlanets(callBack) {
-        WebDB.DB.transaction(tx => {
-            tx.executeSql('SELECT * FROM Planets', [], (ts, data) => {
-                var planets=[];
-                for(var i=0; i<data.rows.length; i++) {
-                    var row = data.rows.item(i)
-                    planets.push({
-                        id:row['ID'],
-                        info:row['info'],
-                    });
-                 }
-                callBack(planets);
-            })
+    async getPlanets() {
+        return new Promise((resolve) =>{
+            WebDB.DB.transaction(tx => {
+                tx.executeSql('SELECT * FROM Planets', [], (ts, data) => {
+                    var planets=[];
+                    for(var i=0; i<data.rows.length; i++) {
+                        var row = data.rows.item(i)
+                        planets.push({
+                            id:row['ID'],
+                            info:row['info'],
+                            name:row['name'],
+                        });
+                     }
+                     resolve(planets);
+                })
+            });
         });
+       
 
     },
     addPlanet: (planet) => {
-        WebDB.ExecuteTransaction('INSERT INTO Planets (id, info) VALUES (?,?)', [planet.id, planet.info]);
+        WebDB.ExecuteTransaction('INSERT INTO Planets (id,name, info) VALUES (?,?,?)', [planet.id,planet.name, planet.info]);
     },
 
     updatePlanet: (planet) => {

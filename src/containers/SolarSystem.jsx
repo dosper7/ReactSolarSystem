@@ -5,6 +5,7 @@ import AddItemBar from '../components/AddItemBar';
 import WithCard from '../hoc/WithCard';
 import SpaceObjectList from '../components/SpaceObjectList';
 import SearchBar from '../components/SearchBar';
+import Modalnfo from '../components/Modalnfo';
 
 class App extends Component {
 
@@ -15,41 +16,39 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    // await DBService.getPlanets(dbPlanets => {
-    //   this.setState({
-    //     planets: dbPlanets,
-    //     initialPlanets: dbPlanets
-    //   })
-    // });
+    var dbPlanets = await DBService.getPlanets();
+    this.setState({ planets: dbPlanets });
   }
 
   state = {
     filterText: "",
     newPlanet: { name: "", info: "" },
-    planets: [
-      {
-        id: 1, name: 'Earth', info: 'the blue planet',
-        moons: [{
-          id: 'moon1', info: 'the white moon'
-        },
-        {
-          id: 'moon2', info: 'the wuaha moon'
-        }]
-      },
-      {
-        id: 2, name: 'Mercury', info: 'the red planet',
-        moons: [{
-          id: 'moon', info: 'the big moon'
-        }]
-      }],
+    planets: []
+    // planets: [
+    //   {
+    //     id: 1, name: 'Earth', info: 'the blue planet',
+    //     moons: [{
+    //       id: 'moon1', info: 'the white moon'
+    //     },
+    //     {
+    //       id: 'moon2', info: 'the wuaha moon'
+    //     }]
+    //   },
+    //   {
+    //     id: 2, name: 'Mercury', info: 'the red planet',
+    //     moons: [{
+    //       id: 'moon', info: 'the big moon'
+    //     }]
+    //   }],
   }
 
 
   addPlanet = (planet) => {
+    planet.id = Date.now();
     let planets = [...this.state.planets];
     planets.push(planet);
     this.setState({ planets });
-    //DBService.addPlanet(planet);
+    DBService.addPlanet(planet);
   }
 
   addMoon = (moon) => {
@@ -57,19 +56,18 @@ class App extends Component {
   }
 
   editPlanet = (planet) => {
-      let planets = [...this.state.planets];
-      let idx = planets.findIndex(p => p.id === planet.id);
-      planets[idx] = planet;
-      this.setState({planets});
-    
-    //DBService.editPlanet(planet);
+    let planets = [...this.state.planets];
+    let idx = planets.findIndex(p => p.id === planet.id);
+    planets[idx] = planet;
+    this.setState({ planets });
+    DBService.editPlanet(planet);
   }
 
   deletePlanet = (planet) => {
     let planets = [...this.state.planets];
     planets.splice(planets.indexOf(planet), 1);
     this.setState({ planets });
-    //DBService.deletePlanet(planet);
+    DBService.deletePlanet(planet);
   }
 
   editMoon = (moon) => {
@@ -97,7 +95,7 @@ class App extends Component {
     this.setState({ filterText: txt })
   }
 
-  showMoonsInfo = (planet) =>{
+  showMoonsInfo = (planet) => {
 
   }
 
