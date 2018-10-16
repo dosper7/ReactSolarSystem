@@ -1,3 +1,6 @@
+# Project built with React.js, WebSql and Bootstrap
+
+
 # Setup Development Tools
  - Install latest version of [node.js](https://nodejs.org/en/)
  - Install [Visual Studio Code](https://code.visualstudio.com/)
