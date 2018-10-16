@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import '../assets/bootstrap/css/bootstrap.min.css'
-import SolarSystem from '../components/SolarSystem.js'
-import ActionBar from '../components/ActionBar.js'
-import DBService from '../services/DatabaseService'
+// import SolarSystem from '../components/SolarSystem.js'
+// import ActionBar from '../components/ActionBar.js'
+import DBService from '../services/DatabaseService.js'
+import SpaceObject from '../components/SpaceObject.js'
+import AddItemBar from '../components/AddItemBar.js';
 
 class App extends Component {
 
@@ -13,41 +14,40 @@ class App extends Component {
   }
 
   async componentDidMount() {
-   await DBService.getPlanets(dbPlanets => {
-      this.setState({
-        planets: dbPlanets,
-        initialPlanets: dbPlanets
-      })
-    });
+    // await DBService.getPlanets(dbPlanets => {
+    //   this.setState({
+    //     planets: dbPlanets,
+    //     initialPlanets: dbPlanets
+    //   })
+    // });
   }
 
   state = {
-    initialPlanets:[],
-    // initialPlanets: [
-    //   {
-    //     id: 1, name: 'Earth', info: 'the blue planet',
-    //     moons: [{
-    //       id: 'moon1', info: 'the white moon'
-    //     },
-    //     {
-    //       id: 'moon2', info: 'the wuaha moon'
-    //     }]
-    //   },
-    //   {
-    //     id: 2, name: 'Mercury', info: 'the red planet',
-    //     moons: [{
-    //       id: 'moon', info: 'the big moon'
-    //     }]
-    //   }],
-    planets: []
+    newPlanet: { name: "", info: "" },
+    planets: [
+      {
+        id: 1, name: 'Earth', info: 'the blue planet',
+        moons: [{
+          id: 'moon1', info: 'the white moon'
+        },
+        {
+          id: 'moon2', info: 'the wuaha moon'
+        }]
+      },
+      {
+        id: 2, name: 'Mercury', info: 'the red planet',
+        moons: [{
+          id: 'moon', info: 'the big moon'
+        }]
+      }],
   }
 
 
   addPlanet = (planet) => {
-    let planets = [...this.state.initialPlanets];
+    let planets = [...this.state.planets];
     planets.push(planet);
-    this.setState({ planets, initialPlanets: planets });
-    DBService.addPlanet(planet);
+    this.setState({ planets });
+    //DBService.addPlanet(planet);
   }
 
   addMoon = (moon) => {
@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   editPlanet = (e, planet) => {
-    if(e.target.value){
+    if (e.target.value) {
       let planets = [...this.state.initialPlanets];
       let idx = planets.findIndex(p => p.id === planet.id);
       planets[idx].info = e.target.value;
@@ -93,9 +93,24 @@ class App extends Component {
   }
 
   render() {
+
+    const showMoons = (moons) => {
+      console.log(moons);
+    };
+
+    const spaceObjects = this.state.planets && this.state.planets.map(p => {
+      return <SpaceObject key={p.id} name={p.name} info={p.info} childSpaceObjects={p.moons} />
+
+    });
     return (
       <div className="container">
-        <SolarSystem
+        <AddItemBar onAddNewItem={this.addPlanet} />
+        <table className="table table-bordered">
+          <tbody>
+            {spaceObjects}
+          </tbody>
+        </table>
+        {/* <SolarSystem
           planets={this.state.planets}
           onPlanetSort={this.sortPlanets}
 
@@ -107,7 +122,7 @@ class App extends Component {
           onMoonEdit={this.editMoon}
         >
           <ActionBar onFilterPlanet={this.filterPlanets} onAddNewPlanet={this.addPlanet} />
-        </SolarSystem>
+        </SolarSystem> */}
       </div>
     );
   }
