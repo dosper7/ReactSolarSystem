@@ -8,6 +8,9 @@
 
 # Build & Run SolarSystem app
 ``` bash
+
+# open command line
+
 # install dependencies
 npm install
  
