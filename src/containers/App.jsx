@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import SolarSystem from '../components/SolarSystem.js'
-// import ActionBar from '../components/ActionBar.js'
-import DBService from '../services/DatabaseService.js'
-import SpaceObject from '../components/SpaceObject.js'
-import AddItemBar from '../components/AddItemBar.js';
+import DBService from '../services/DatabaseService'
+import SpaceObject from '../components/SpaceObject'
+import AddItemBar from '../components/AddItemBar';
+import WithCard from '../hoc/WithCard';
+import SpaceObjectList from '../components/SpaceObjectList';
+import FilterItem from '../components/FilterItem';
 
 class App extends Component {
 
@@ -23,6 +24,7 @@ class App extends Component {
   }
 
   state = {
+    filterText: "",
     newPlanet: { name: "", info: "" },
     planets: [
       {
@@ -85,51 +87,39 @@ class App extends Component {
     this.setState({ planets: sortedPlanets });
   }
 
-  filterPlanets = (evt) => {
+  filterPlanets = (text) => {
     let filteredPlanets = [...this.state.initialPlanets].filter(p => {
-      return p.name.toLowerCase().search(evt.target.value.toLowerCase()) !== -1;
+      return p.name.toLowerCase().search(text.toLowerCase()) !== -1;
     });
     this.setState({ planets: filteredPlanets });
   }
 
   render() {
 
-    const showMoons = (moons) => {
-      console.log(moons);
-    };
+    let planets = this.state.planets;
 
-    const spaceObjects = this.state.planets && this.state.planets.map(p => {
-      return <SpaceObject key={p.id} name={p.name} info={p.info} childSpaceObjects={p.moons} />
+    if (this.state.planets) {
 
-    });
+      planets = [...this.state.planets];
+
+      if (this.state.filterText) {
+        planets = planets.filter(p => p.name && p.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
+      }
+
+    }
+
+    const spaceObjects = planets && planets.map(planet =>
+      <SpaceObject
+        key={planet.id}
+        name={planet.name}
+        info={planet.info}
+        childSpaceObjects={planet.moons} />);
+
     return (
-      <div className="container">
-        <div className="card">
-          <div className="card-body">
-          <h5 className="card-title">Add Planet</h5>
-            <AddItemBar onAddNewItem={this.addPlanet} />
-            
-          </div>
-          <table className="table table-bordered">
-              <tbody>
-                {spaceObjects}
-              </tbody>
-            </table>
-        </div>
-
-        {/* <SolarSystem
-          planets={this.state.planets}
-          onPlanetSort={this.sortPlanets}
-
-          onPlanetDelete={this.deletePlanet}
-          onPlanetEditInfo={this.editPlanet}
-
-          onMoonAdd={this.addMoon}
-          onMoonDelete={this.delenteMoon}
-          onMoonEdit={this.editMoon}
-        >
-          <ActionBar onFilterPlanet={this.filterPlanets} onAddNewPlanet={this.addPlanet} />
-        </SolarSystem> */}
+      <div className="container mt-4">
+        <WithCard title="Add Planet" body={<AddItemBar onAddNewItem={this.addPlanet} />} />
+        <WithCard body={<FilterItem onAddNewItem={this.addPlanet} onTextChange={(val) => this.setState({ filterText: val })} />} />
+        <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} filterText={this.state.filterText} />
       </div>
     );
   }
