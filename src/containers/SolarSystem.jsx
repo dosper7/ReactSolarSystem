@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import DBService from '../services/DatabaseService'
 import SpaceObject from '../components/SpaceObject'
 import AddItemBar from '../components/AddItemBar';
 import WithCard from '../hoc/WithCard';
@@ -9,37 +8,25 @@ import Modalnfo from '../components/Modalnfo';
 
 class App extends Component {
 
-  constructor() {
-    super();
-    DBService.initDB();
-    //this.state.planets = this.state.initialPlanets;
-  }
-
-  async componentDidMount() {
-    var dbPlanets = await DBService.getPlanets();
-    this.setState({ planets: dbPlanets });
-  }
-
   state = {
     filterText: "",
     newPlanet: { name: "", info: "" },
-    planets: []
-    // planets: [
-    //   {
-    //     id: 1, name: 'Earth', info: 'the blue planet',
-    //     moons: [{
-    //       id: 'moon1', info: 'the white moon'
-    //     },
-    //     {
-    //       id: 'moon2', info: 'the wuaha moon'
-    //     }]
-    //   },
-    //   {
-    //     id: 2, name: 'Mercury', info: 'the red planet',
-    //     moons: [{
-    //       id: 'moon', info: 'the big moon'
-    //     }]
-    //   }],
+    planets: [
+      {
+        id: 1, name: 'Earth', info: 'the blue planet',
+        moons: [{
+          id: 'moon1', info: 'the white moon'
+        },
+        {
+          id: 'moon2', info: 'the wuaha moon'
+        }]
+      },
+      {
+        id: 2, name: 'Mercury', info: 'the red planet',
+        moons: [{
+          id: 'moon', info: 'the big moon'
+        }]
+      }],
   }
 
 
@@ -48,7 +35,6 @@ class App extends Component {
     let planets = [...this.state.planets];
     planets.push(planet);
     this.setState({ planets });
-    DBService.addPlanet(planet);
   }
 
   addMoon = (moon) => {
@@ -60,22 +46,18 @@ class App extends Component {
     let idx = planets.findIndex(p => p.id === planet.id);
     planets[idx] = planet;
     this.setState({ planets });
-    DBService.updatePlanet(planet);
   }
 
   deletePlanet = (planet) => {
     let planets = [...this.state.planets];
     planets.splice(planets.indexOf(planet), 1);
     this.setState({ planets });
-    DBService.deletePlanet(planet);
   }
 
   editMoon = (moon) => {
-    //DBService.editPlanet(moon);
   }
 
   delenteMoon = (moon) => {
-    DBService.editPlanet(moon);
   }
 
   sortPlanets = () => {
