@@ -1,4 +1,4 @@
-# Project built with React.js, WebSql and Bootstrap
+# Project built with React.js, Redux and Bootstrap
 
 
 # Setup Development Tools
