@@ -4,74 +4,43 @@ import AddItemBar from '../components/AddItemBar';
 import WithCard from '../hoc/WithCard';
 import SpaceObjectList from '../components/SpaceObjectList';
 import SearchBar from '../components/SearchBar';
-import Modalnfo from '../components/Modalnfo';
+import { connect } from 'react-redux';
+import actionTypes from '../store/actions.js';
 
-class App extends Component {
+class SolarSystem extends Component {
 
   state = {
     filterText: "",
-    newPlanet: { name: "", info: "" },
-    planets: [
-      {
-        id: 1, name: 'Earth', info: 'the blue planet',
-        moons: [{
-          id: 'moon1', info: 'the white moon'
-        },
-        {
-          id: 'moon2', info: 'the wuaha moon'
-        }]
-      },
-      {
-        id: 2, name: 'Mercury', info: 'the red planet',
-        moons: [{
-          id: 'moon', info: 'the big moon'
-        }]
-      }],
   }
 
 
-  addPlanet = (planet) => {
-    planet.id = Date.now();
-    let planets = [...this.state.planets];
-    planets.push(planet);
-    this.setState({ planets });
-  }
+  // addPlanet = (planet) => {
+  //   planet.id = Date.now();
+  //   let planets = [...this.state.planets];
+  //   planets.push(planet);
+  //   this.setState({ planets });
+  // }
 
-  addMoon = (moon) => {
-    //DBService.addMoon(moon);
-  }
 
-  editPlanet = (planet) => {
-    let planets = [...this.state.planets];
-    let idx = planets.findIndex(p => p.id === planet.id);
-    planets[idx] = planet;
-    this.setState({ planets });
-  }
+  // editPlanet = (planet) => {
+  //   let planets = [...this.state.planets];
+  //   let idx = planets.findIndex(p => p.id === planet.id);
+  //   planets[idx] = planet;
+  //   this.setState({ planets });
+  // }
 
-  deletePlanet = (planet) => {
-    let planets = [...this.state.planets];
-    planets.splice(planets.indexOf(planet), 1);
-    this.setState({ planets });
-  }
+  // deletePlanet = (planet) => {
+  //   let planets = [...this.state.planets];
+  //   planets.splice(planets.indexOf(planet), 1);
+  //   this.setState({ planets });
+  // }
 
-  editMoon = (moon) => {
-  }
 
-  delenteMoon = (moon) => {
-  }
-
-  sortPlanets = () => {
-    let sortedPlanets = (this.state.planets || this.state.initialPlanets);
-    sortedPlanets = [...sortedPlanets].reverse();
-    this.setState({ planets: sortedPlanets });
-  }
-
-  filterPlanets = (text) => {
-    let filteredPlanets = [...this.state.initialPlanets].filter(p => {
-      return p.name.toLowerCase().search(text.toLowerCase()) !== -1;
-    });
-    this.setState({ planets: filteredPlanets });
-  }
+  // sortPlanets = () => {
+  //   let sortedPlanets = (this.state.planets || this.state.initialPlanets);
+  //   sortedPlanets = [...sortedPlanets].reverse();
+  //   this.setState({ planets: sortedPlanets });
+  // }
 
   onSearchBarTextChanged = (txt) => {
     this.setState({ filterText: txt })
@@ -83,9 +52,9 @@ class App extends Component {
 
   render() {
 
-    let planets = this.state.planets;
+    let planets = this.props.planets;
     if (planets) {
-      planets = [...this.state.planets];
+      planets = [...this.props.planets];
       if (this.state.filterText) {
         planets = planets.filter(p => p.name && p.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
       }
@@ -99,23 +68,40 @@ class App extends Component {
         key={planet.id}
         spaceObject={planet}
         childSpaceObjects={planet.moons}
-        onEdit={this.editPlanet}
-        onDelete={this.deletePlanet}
+        onEdit={this.props.onEditPlanet}
+        onDelete={this.props.onDeletePlanet}
         groupName="Moons" />);
 
     return (
       <div className="container mt-4">
-        <WithCard title="Add Planet" body={<AddItemBar onAddNewItem={this.addPlanet} />} />
+        <WithCard title="Add Planet" body={<AddItemBar onAddNewItem={this.props.onAddNewPlanet} />} />
         <WithCard body={
           <SearchBar
-            onAddNewItem={this.addPlanet}
+            onAddNewItem={this.props.onAddNewPlanet}
             placeHolderHint="Planet Name"
             onTextChange={this.onSearchBarTextChanged} />
         } />
-        {hasPlanets && <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} filterText={this.state.filterText} />}
+        {hasPlanets && <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} />}
       </div>
     );
   }
 }
 
-export default App;
+//Redux configur
+const mapStateToProps = state => {
+  return {
+    planets: state.planets,
+    filterText: state.filterText,
+  }
+}
+
+const mapDispatchToPros = dispatch => {
+  return {
+    onAddNewPlanet: (planet) => dispatch({ type: actionTypes.ADD_NEW_PLANET, newPlanet: planet }),
+    onFilterPlanet: (text) => dispatch({ type: actionTypes.FILTER_TEXT, searchText: text }),
+    onEditPlanet: (planet) => dispatch({ type: actionTypes.EDIT_PLANET, editedPlanet: planet }),
+    onDeletePlanet: (id) => dispatch({ type: actionTypes.DELETE_PLANET, planetId: id })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToPros)(SolarSystem);
