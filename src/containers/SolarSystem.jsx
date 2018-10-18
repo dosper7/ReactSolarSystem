@@ -98,7 +98,6 @@ const mapStateToProps = state => {
 const mapDispatchToPros = dispatch => {
   return {
     onAddNewPlanet: (planet) => dispatch({ type: actionTypes.ADD_NEW_PLANET, newPlanet: planet }),
-    onFilterPlanet: (text) => dispatch({ type: actionTypes.FILTER_TEXT, searchText: text }),
     onEditPlanet: (planet) => dispatch({ type: actionTypes.EDIT_PLANET, editedPlanet: planet }),
     onDeletePlanet: (id) => dispatch({ type: actionTypes.DELETE_PLANET, planetId: id })
   }

@@ -32,11 +32,6 @@ const reducer = (state = initSate, action) => {
                 planets
             };
 
-        case actionTypes.FILTER_TEXT:
-            return {
-                ...state,
-            };
-
         case actionTypes.DELETE_PLANET:
             return {
                 ...state,
