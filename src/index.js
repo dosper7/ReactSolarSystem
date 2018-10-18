@@ -2,13 +2,18 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore} from 'redux';
+import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
-
 import SolarSystem from './containers/SolarSystem';
-import reducer from './store/reducers/reducer.js'
+import planetReducer from './store/reducers/planetsReducer'
 
-const store = createStore(reducer);
+//TODO: refactor later to add moons reducer
+// const rootReducer = combineReducers({
+//    planets : planetReducer,
+//    moons: moonsReducer 
+// });
+
+const store = createStore(planetReducer);
 
 ReactDOM.render(<Provider store={store}><SolarSystem /></Provider>, document.getElementById('root'));
 

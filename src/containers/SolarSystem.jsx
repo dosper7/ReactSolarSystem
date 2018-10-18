@@ -13,48 +13,14 @@ class SolarSystem extends Component {
     filterText: "",
   }
 
-
-  // addPlanet = (planet) => {
-  //   planet.id = Date.now();
-  //   let planets = [...this.state.planets];
-  //   planets.push(planet);
-  //   this.setState({ planets });
-  // }
-
-
-  // editPlanet = (planet) => {
-  //   let planets = [...this.state.planets];
-  //   let idx = planets.findIndex(p => p.id === planet.id);
-  //   planets[idx] = planet;
-  //   this.setState({ planets });
-  // }
-
-  // deletePlanet = (planet) => {
-  //   let planets = [...this.state.planets];
-  //   planets.splice(planets.indexOf(planet), 1);
-  //   this.setState({ planets });
-  // }
-
-
-  // sortPlanets = () => {
-  //   let sortedPlanets = (this.state.planets || this.state.initialPlanets);
-  //   sortedPlanets = [...sortedPlanets].reverse();
-  //   this.setState({ planets: sortedPlanets });
-  // }
-
   onSearchBarTextChanged = (txt) => {
     this.setState({ filterText: txt })
-  }
-
-  showMoonsInfo = (planet) => {
-
   }
 
   render() {
 
     let planets = this.props.planets;
     if (planets) {
-      planets = [...this.props.planets];
       if (this.state.filterText) {
         planets = planets.filter(p => p.name && p.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
       }
@@ -81,13 +47,13 @@ class SolarSystem extends Component {
             placeHolderHint="Planet Name"
             onTextChange={this.onSearchBarTextChanged} />
         } />
-        {hasPlanets && <SpaceObjectList onSortSpaceObject={this.sortPlanets} spaceObjects={spaceObjects} />}
+        {hasPlanets && <SpaceObjectList onSortSpaceObject={this.props.onSortPlanets} spaceObjects={spaceObjects} />}
       </div>
     );
   }
 }
 
-//Redux configur
+//Redux bindings
 const mapStateToProps = state => {
   return {
     planets: state.planets,
@@ -99,7 +65,8 @@ const mapDispatchToPros = dispatch => {
   return {
     onAddNewPlanet: (planet) => dispatch({ type: actionTypes.ADD_NEW_PLANET, newPlanet: planet }),
     onEditPlanet: (planet) => dispatch({ type: actionTypes.EDIT_PLANET, editedPlanet: planet }),
-    onDeletePlanet: (id) => dispatch({ type: actionTypes.DELETE_PLANET, planetId: id })
+    onDeletePlanet: (id) => dispatch({ type: actionTypes.DELETE_PLANET, planetId: id }),
+    onSortPlanets: () => dispatch({ type: actionTypes.SORT_PLANETS})
   }
 }
 
