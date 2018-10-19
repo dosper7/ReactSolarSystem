@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class SpaceObject extends Component {
 
-
     constructor(props) {
         super(props);
         this.cleanState = {
@@ -61,13 +60,13 @@ class SpaceObject extends Component {
                     <p>
                         {this.state.onReadMode ? spaceObject.info : this.getEditField("info", spaceObject.info)}
                     </p>
-                    <a title="Click to see more..." onClick={this.props.onShowChildsClick} href="#" className="badge badge-pill badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</a>
+                    {this.props.enableChildActions && <a title="Click to see more info" onClick={this.props.onShowChildsClick} href="#" className="badge badge-pill badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</a>}
                 </td>
                 <td style={style}>
                     {!this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.saveChange}>Save</button>}
                     {!this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={this.toggleMode}>Cancel</button>}
 
-                    {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={this.props.onDelete.bind(this, spaceObject)}>Delete</button>}
+                    {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={() => this.props.onDelete(spaceObject)}>Delete</button>}
                     {this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.toggleMode}>Edit</button>}
 
                 </td>
