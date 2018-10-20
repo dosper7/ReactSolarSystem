@@ -20,7 +20,7 @@ class SolarSystem extends Component {
 
   showMoonsInfo = (evt, planet) => {
     evt.preventDefault();
-    if (this.state.showingMoonInfo && this.props.currentPlanetContext && this.props.currentPlanetContext.id == planet.id) {
+    if (this.state.showingMoonInfo && this.props.currentPlanetContext && this.props.currentPlanetContext.id === planet.id) {
       this.setState({ showingMoonInfo: false });
     } else {
       this.props.onShowMoonInfo(planet);
@@ -83,9 +83,11 @@ class SolarSystem extends Component {
 
         {(this.state.showingMoonInfo && this.props.currentPlanetContext) &&
           <div>
-            <WithCard title={"Add Moon (" + this.getCurrentPlanetName() + ")"} body={
+            <WithCard title={"Add Moon"} 
+            cssClass="bg-light"
+            body={
               <AddItemBar onAddNewItem={this.handleNewMoonAdding}>
-                <SpaceObjectList onSortSpaceObject={this.props.onSortMoons} spaceObjects={this.getMoonsInContext()} spaceObjectName={"Moons of " + this.getCurrentPlanetName()} />
+                <SpaceObjectList onSortSpaceObject={this.props.onSortMoons} spaceObjects={this.getMoonsInContext()} spaceObjectName={"Moons (of " + this.getCurrentPlanetName()+")"} />
               </AddItemBar>
             } />
           </div>

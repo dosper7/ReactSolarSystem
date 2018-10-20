@@ -57,16 +57,17 @@ class SpaceObject extends Component {
 
         const col2 =
             <React.Fragment>
-                {this.state.onReadMode ? spaceObject.info : this.getEditField("info", spaceObject.info)}
-                {this.props.enableChildActions && <a title="Click to see more info" onClick={this.props.onShowChildsClick} href="#" className="badge badge-pill badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</a>}
+                {this.state.onReadMode ? <span className="col-sm-2 col-form-label">{spaceObject.info}</span> : this.getEditField("info", spaceObject.info)}
+                {this.props.enableChildActions && <span className="badge badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</span>}
             </React.Fragment>;
 
         const col3 =
             <React.Fragment>
-                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.saveChange}>Save</button>}
-                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={this.toggleMode}>Cancel</button>}
-                {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={() => this.props.onDelete(spaceObject)}>Delete</button>}
-                {this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.toggleMode}>Edit</button>}
+                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-sm" onClick={this.saveChange}>Save</button>}
+                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-sm" onClick={this.toggleMode}>Cancel</button>}
+                {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-sm" onClick={() => this.props.onDelete(spaceObject)}>Delete</button>}
+                {this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-sm" onClick={this.toggleMode}>Edit</button>}
+                {this.props.enableChildActions && <button onClick={this.props.onShowChildsClick} className="mr-2 btn btn-outline-success btn-sm">Manage {this.props.groupName}</button>}
             </React.Fragment>;
 
         return [col1, col2, col3];
