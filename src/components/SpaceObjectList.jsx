@@ -1,22 +1,19 @@
 import React from 'react';
+import WithGroupItem from '../hoc/WithGroupItem';
 
 const SpaceObjectList = (props) => {
 
+const items=[
+  props.spaceObjectName,
+  "Info",
+  "#"
+];
 
   return (
-    <table className="table table-bordered">
-      <thead>
-        <tr>
-          <th onClick={props.onSortSpaceObject}>
-            <i className="fas fa-sort"></i>{props.spaceObjectName}</th>
-          <th>Info</th>
-          <th>#</th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.spaceObjects}
-      </tbody>
-    </table>
+    <div className="list-group">
+      <WithGroupItem groupItems={items} active={true} />
+      {props.spaceObjects}
+    </div>
   );
 }
 

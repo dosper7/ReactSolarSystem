@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import WithGroupItem from '../hoc/WithGroupItem';
 
 class SpaceObject extends Component {
 
@@ -37,41 +38,44 @@ class SpaceObject extends Component {
     }
 
     saveChange = () => {
-        if (this.state.info && this.state.name) {
-            const newInfo = { id: this.props.spaceObject.id, ...this.state };
-            this.props.onEdit(newInfo);
+        const spaceObject = this.props.spaceObject;
+        if (this.state.info || this.state.name) {
+            const newSpaceObject = {
+                id: this.props.spaceObject.id,
+                name: this.state.name || spaceObject.name,
+                info: this.state.info || spaceObject.info
+            };
+            this.props.onEdit(newSpaceObject);
             this.setState(this.cleanState);
         }
     }
 
-    render() {
+    buildCoumns = () => {
 
         const spaceObject = this.props.spaceObject;
-        const style ={width:"33%"};
+        const col1 = (this.state.onReadMode ? spaceObject.name : this.getEditField("name", spaceObject.name));
 
+        const col2 =
+            <React.Fragment>
+                {this.state.onReadMode ? spaceObject.info : this.getEditField("info", spaceObject.info)}
+                {this.props.enableChildActions && <a title="Click to see more info" onClick={this.props.onShowChildsClick} href="#" className="badge badge-pill badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</a>}
+            </React.Fragment>;
+
+        const col3 =
+            <React.Fragment>
+                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.saveChange}>Save</button>}
+                {!this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={this.toggleMode}>Cancel</button>}
+                {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={() => this.props.onDelete(spaceObject)}>Delete</button>}
+                {this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.toggleMode}>Edit</button>}
+            </React.Fragment>;
+
+        return [col1, col2, col3];
+    }
+
+    render() {
+        const columns = this.buildCoumns();
         return (
-            <tr>
-                <td style={style}>
-                    <p>
-                        {this.state.onReadMode ? spaceObject.name : this.getEditField("name", spaceObject.name)}
-                    </p>
-                </td>
-                <td style={style}>
-                    <p>
-                        {this.state.onReadMode ? spaceObject.info : this.getEditField("info", spaceObject.info)}
-                    </p>
-                    {this.props.enableChildActions && <a title="Click to see more info" onClick={this.props.onShowChildsClick} href="#" className="badge badge-pill badge-info">{this.props.childSpaceObjects ? this.props.childSpaceObjects.length : "0"} {this.props.groupName}</a>}
-                </td>
-                <td style={style}>
-                    {!this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.saveChange}>Save</button>}
-                    {!this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={this.toggleMode}>Cancel</button>}
-
-                    {this.state.onReadMode && <button className="mr-2 btn btn-outline-danger btn-xs" onClick={() => this.props.onDelete(spaceObject)}>Delete</button>}
-                    {this.state.onReadMode && <button className="mr-2 btn btn-outline-info btn-xs" onClick={this.toggleMode}>Edit</button>}
-
-                </td>
-
-            </tr>
+            <WithGroupItem groupItems={columns} />
         );
     }
 
