@@ -44,7 +44,8 @@ const reducer = (state = initSate, action) => {
         case actionTypes.EDIT_PLANET:
             return produce(state, draft => {
                 const idx = draft.planets.findIndex(p => p.id === action.editedPlanet.id);
-                draft.planets[idx] = action.editedPlanet;
+                draft.planets[idx].info = action.editedPlanet.info;
+                draft.planets[idx].name = action.editedPlanet.name;
             });
 
         case actionTypes.SORT_PLANETS:
