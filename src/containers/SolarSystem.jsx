@@ -121,13 +121,14 @@ const mapDispatchToProps = (dispatch) => {
     //moons
     onAddNewMoon: (moon) => { dispatch({ type: actionTypes.ADD_NEW_MOON, newMoon: moon }); },
     onEditMoon: (moon) => { dispatch({ type: actionTypes.EDIT_MOON, moon }); },
-    onDeleteMoon: (moon) => { dispatch({ type: actionTypes.DELETE_MOON, moon: moon }); },
-
-    onShowMoonInfo: (planet) => {
+    onShowMoonInfo: (planet) => { dispatch({ type: actionTypes.SHOW_MOON_INFO, planet }) },
+    onDeleteMoon: (moon) => {
       setTimeout(() => {
-        dispatch({ type: actionTypes.SHOW_MOON_INFO, planet });
+        dispatch({ type: actionTypes.DELETE_MOON, moon: moon });
       }, 1000);
+
     },
+
   }
 }
 
