@@ -1,33 +1,8 @@
 import actionTypes from '../actions.js';
 import { produce } from 'immer';
+import initialState from './initialState.js'
 
-const initSate = {
-    currentPlanetContext: null,
-    planets: [{
-        id: 1,
-        name: 'Earth',
-        info: 'the blue planet',
-        moons: [{
-            id: 1,
-            name: 'Hunter\'s Moon',
-            info: 'moon in october',
-            planetId: 1
-        }]
-    },
-    {
-        id: 2,
-        name: 'Mercury',
-        info: 'the red planet',
-        moons: [{
-            id: 2,
-            name: 'Snow moon',
-            info: 'moon in february',
-            planetId: 2
-        }]
-    }],
-};
-
-const reducer = (state = initSate, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case actionTypes.ADD_NEW_PLANET:
@@ -44,7 +19,8 @@ const reducer = (state = initSate, action) => {
         case actionTypes.EDIT_PLANET:
             return produce(state, draft => {
                 const idx = draft.planets.findIndex(p => p.id === action.editedPlanet.id);
-                draft.planets[idx] = action.editedPlanet;
+                draft.planets[idx].info = action.editedPlanet.info;
+                draft.planets[idx].name = action.editedPlanet.name;
             });
 
         case actionTypes.SORT_PLANETS:

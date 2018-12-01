@@ -83,13 +83,13 @@ class SolarSystem extends Component {
 
         {(this.state.showingMoonInfo && this.props.currentPlanetContext) &&
           <div>
-            <WithCard title={"Add Moon"} 
-            cssClass="bg-light"
-            body={
-              <AddItemBar onAddNewItem={this.handleNewMoonAdding}>
-                <SpaceObjectList onSortSpaceObject={this.props.onSortMoons} spaceObjects={this.getMoonsInContext()} spaceObjectName={"Moons (of " + this.getCurrentPlanetName()+")"} />
-              </AddItemBar>
-            } />
+            <WithCard title={"Add Moon"}
+              cssClass="bg-light"
+              body={
+                <AddItemBar onAddNewItem={this.handleNewMoonAdding}>
+                  <SpaceObjectList onSortSpaceObject={this.props.onSortMoons} spaceObjects={this.getMoonsInContext()} spaceObjectName={"Moons (of " + this.getCurrentPlanetName() + ")"} />
+                </AddItemBar>
+              } />
           </div>
         }
 
@@ -121,8 +121,14 @@ const mapDispatchToProps = (dispatch) => {
     //moons
     onAddNewMoon: (moon) => { dispatch({ type: actionTypes.ADD_NEW_MOON, newMoon: moon }); },
     onEditMoon: (moon) => { dispatch({ type: actionTypes.EDIT_MOON, moon }); },
-    onDeleteMoon: (moon) => { dispatch({ type: actionTypes.DELETE_MOON, moon: moon }); },
-    onShowMoonInfo: (planet) => { dispatch({ type: actionTypes.SHOW_MOON_INFO, planet }); },
+    onShowMoonInfo: (planet) => { dispatch({ type: actionTypes.SHOW_MOON_INFO, planet }) },
+    onDeleteMoon: (moon) => {
+      setTimeout(() => {
+        dispatch({ type: actionTypes.DELETE_MOON, moon: moon });
+      }, 1000);
+
+    },
+
   }
 }
 
