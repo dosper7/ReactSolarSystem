@@ -10,11 +10,3 @@
  };
 
  export default actionTypes;
-
- export const actionTypeCreators = {
-     addNewPlanet: () => {
-         return {
-             type: actionTypes.ADD_NEW_PLANET
-         };
-     }
- };
